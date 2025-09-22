@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ditzy - Your Digital Hub</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>©Ditzy</h1>
+            <p>Your Personal Digital Hub</p>
+        </div>
+
+        <!-- Login Form -->
+        <div id="loginContainer" class="login-container">
+            <form class="login-form" id="loginForm">
+                <h2 style="text-align: center; margin-bottom: 30px; color: #667eea;">Login to Access</h2>
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <button type="submit" class="btn">Login</button>
+                <p style="text-align: center; margin-top: 15px; color: #666;">
+                    Demo: username = "admin", password = "ditzy123"
+                </p>
+            </form>
+        </div>
+
+        <!-- Main Application -->
+        <div id="mainApp" class="main-app hidden">
+            <div class="user-info">
+                <button class="btn logout-btn" onclick="logout()">Logout</button>
+                <h2>Welcome, <span id="currentUser"></span>!</h2>
+                <p>Status: <span class="status-online">● Online</span></p>
+                <p>Last Login: <span id="loginTime"></span></p>
+            </div>
+
+            <div class="feature-grid">
+                <!-- Audio Player -->
+                <div class="feature-card">
+                    <h3>🎵 Audio Player</h3>
+                    <div class="audio-player">
+                        <input type="file" id="audioFile" accept="audio/*" style="margin-bottom: 10px;">
+                        <audio id="audioElement" controls style="width: 100%; margin-bottom: 10px;"></audio>
+                        <div class="audio-controls">
+                            <button onclick="playAudio()">Play</button>
+                            <button onclick="pauseAudio()">Pause</button>
+                            <button onclick="stopAudio()">Stop</button>
+                            <button onclick="changeVolume(0.5)">50%</button>
+                            <button onclick="changeVolume(1.0)">100%</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- YouTube Shortcut -->
+                <div class="feature-card">
+                    <h3>📺 YouTube Quick Access</h3>
+                    <div class="youtube-input">
+                        <input type="text" id="youtubeSearch" placeholder="Search YouTube...">
+                        <button class="btn" onclick="searchYouTube()" style="width: 25%; padding: 10px;">Search</button>
+                    </div>
+                    <button class="btn" onclick="openYouTube()" style="margin-top: 10px;">Open YouTube</button>
+                </div>
+
+                <!-- Ping Checker -->
+                <div class="feature-card">
+                    <h3>🌐 Ping Checker</h3>
+                    <input type="text" id="pingUrl" placeholder="Enter website (e.g., google.com)" style="width: 70%; padding: 10px; margin-right: 10px; border: 2px solid #ddd; border-radius: 5px;">
+                    <button class="btn" onclick="checkPing()" style="width: 25%; padding: 10px;">Ping</button>
+                    <div id="pingResult" class="ping-result"></div>
+                </div>
+
+                <!-- Device Information -->
+                <div class="feature-card">
+                    <h3>📱 Device Information</h3>
+                    <button class="btn" onclick="getDeviceInfo()" style="margin-bottom: 15px;">Refresh Info</button>
+                    <div id="deviceInfo" class="device-info"></div>
+                </div>
+
+                <!-- Calculator -->
+                <div class="feature-card">
+                    <h3>🧮 Calculator</h3>
+                    <div class="calculator">
+                        <input type="text" id="calcDisplay" class="calc-display" readonly>
+                        <div class="calc-buttons">
+                            <button class="calc-btn operator" onclick="clearCalc()">C</button>
+                            <button class="calc-btn operator" onclick="appendToCalc('/')">/</button>
+                            <button class="calc-btn operator" onclick="appendToCalc('*')">×</button>
+                            <button class="calc-btn operator" onclick="deleteLast()">⌫</button>
+                            
+                            <button class="calc-btn number" onclick="appendToCalc('7')">7</button>
+                            <button class="calc-btn number" onclick="appendToCalc('8')">8</button>
+                            <button class="calc-btn number" onclick="appendToCalc('9')">9</button>
+                            <button class="calc-btn operator" onclick="appendToCalc('-')">-</button>
+                            
+                            <button class="calc-btn number" onclick="appendToCalc('4')">4</button>
+                            <button class="calc-btn number" onclick="appendToCalc('5')">5</button>
+                            <button class="calc-btn number" onclick="appendToCalc('6')">6</button>
+                            <button class="calc-btn operator" onclick="appendToCalc('+')">+</button>
+                            
+                            <button class="calc-btn number" onclick="appendToCalc('1')">1</button>
+                            <button class="calc-btn number" onclick="appendToCalc('2')">2</button>
+                            <button class="calc-btn number" onclick="appendToCalc('3')">3</button>
+                            <button class="calc-btn operator" onclick="calculate()" rowspan="2">=</button>
+                            
+                            <button class="calc-btn number" onclick="appendToCalc('0')" style="grid-column: span 2;">0</button>
+                            <button class="calc-btn number" onclick="appendToCalc('.')">.</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Weather Widget -->
+                <div class="feature-card">
+                    <h3>🌤️ Weather Info</h3>
+                    <div class="weather-widget">
+                        <button class="btn" onclick="getWeatherInfo()" style="margin-bottom: 15px;">Get Weather</button>
+                        <div id="weatherInfo" class="weather-info"></div>
+                    </div>
+                </div>
+
+                <!-- System Monitor -->
+                <div class="feature-card">
+                    <h3>📊 System Monitor</h3>
+                    <div id="systemMonitor">
+                        <div style="margin: 10px 0;">
+                            <label>CPU Usage:</label>
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="cpuProgress" style="width: 0%"></div>
+                            </div>
+                            <span id="cpuText">0%</span>
+                        </div>
+                        <div style="margin: 10px 0;">
+                            <label>Memory Usage:</label>
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="memProgress" style="width: 0%"></div>
+                            </div>
+                            <span id="memText">0%</span>
+                        </div>
+                        <button class="btn" onclick="updateSystemInfo()">Update Stats</button>
+                    </div>
+                </div>
+
+                <!-- Quick Tools -->
+                <div class="feature-card">
+                    <h3>🛠️ Quick Tools</h3>
+                    <div style="display: flex; flex-direction: column; gap: 10px;">
+                        <button class="btn" onclick="generatePassword()">Generate Password</button>
+                        <button class="btn" onclick="getRandomQuote()">Random Quote</button>
+                        <button class="btn" onclick="colorPicker()">Color Picker</button>
+                        <button class="btn" onclick="base64Converter()">Base64 Converter</button>
+                    </div>
+                    <div id="toolResult" style="margin-top: 15px; padding: 10px; background: #f8f9fa; border-radius: 5px; min-height: 50px;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript Files -->
+    <script src="js/auth.js"></script>
+    <script src="js/audio-player.js"></script>
+    <script src="js/tools.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
